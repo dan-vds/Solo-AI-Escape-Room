@@ -1,6 +1,9 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,9 +30,11 @@ public class ChatController {
    * Initializes the chat view, loading the riddle.
    *
    * @throws ApiProxyException if there is an error communicating with the API proxy
+   * @throws ExecutionException
+   * @throws InterruptedException
    */
   @FXML
-  public void initialize() throws ApiProxyException {
+  public void initialize() throws ApiProxyException, InterruptedException, ExecutionException {
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
     runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleWithGivenWord("vase")));
@@ -50,20 +55,41 @@ public class ChatController {
    * @param msg the chat message to process
    * @return the response chat message
    * @throws ApiProxyException if there is an error communicating with the API proxy
+   * @throws ExecutionException
+   * @throws InterruptedException
    */
-  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
+  private ChatMessage runGpt(ChatMessage msg)
+      throws ApiProxyException, InterruptedException, ExecutionException {
     chatCompletionRequest.addMessage(msg);
-    try {
-      ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
-      Choice result = chatCompletionResult.getChoices().iterator().next();
-      chatCompletionRequest.addMessage(result.getChatMessage());
-      appendChatMessage(result.getChatMessage());
-      return result.getChatMessage();
-    } catch (ApiProxyException e) {
-      // TODO handle exception appropriately
-      e.printStackTrace();
-      return null;
-    }
+
+    Task<ChatMessage> gptTask =
+        new Task<ChatMessage>() {
+          @Override
+          protected ChatMessage call() throws Exception {
+            try {
+              ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
+              Choice result = chatCompletionResult.getChoices().iterator().next();
+              chatCompletionRequest.addMessage(result.getChatMessage());
+              return result.getChatMessage();
+            } catch (ApiProxyException e) {
+              // TODO handle exception appropriately
+              e.printStackTrace();
+              return null;
+            }
+          }
+        };
+
+    new Thread(gptTask).start();
+
+    gptTask.setOnSucceeded(
+        event -> {
+          ChatMessage resultMessage = gptTask.getValue();
+          if (resultMessage != null) {
+            Platform.runLater(() -> appendChatMessage(resultMessage));
+          }
+        });
+
+    return gptTask.get();
   }
 
   /**
@@ -72,9 +98,12 @@ public class ChatController {
    * @param event the action event triggered by the send button
    * @throws ApiProxyException if there is an error communicating with the API proxy
    * @throws IOException if there is an I/O error
+   * @throws ExecutionException
+   * @throws InterruptedException
    */
   @FXML
-  private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
+  private void onSendMessage(ActionEvent event)
+      throws ApiProxyException, IOException, InterruptedException, ExecutionException {
     String message = inputText.getText();
     if (message.trim().isEmpty()) {
       return;

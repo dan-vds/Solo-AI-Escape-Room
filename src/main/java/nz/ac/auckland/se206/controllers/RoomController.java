@@ -1,13 +1,19 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
-import nz.ac.auckland.se206.App;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
 public class RoomController {
@@ -15,10 +21,36 @@ public class RoomController {
   @FXML private Rectangle door;
   @FXML private Rectangle window;
   @FXML private Rectangle vase;
+  @FXML private Label timerLabel;
+
+  private int totalSeconds = 120;
+  private int remainingSeconds = totalSeconds;
+  private Timeline timeline;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
-    // Initialization code goes here
+    timeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.seconds(1),
+                event -> {
+                  remainingSeconds--;
+                  updateTimerLabel();
+                }));
+    timeline.setCycleCount(120);
+    timeline.setOnFinished(event -> handleTimerExpired());
+    updateTimerLabel();
+    timeline.play();
+  }
+
+  private void updateTimerLabel() {
+    int minutes = remainingSeconds / 60;
+    int seconds = remainingSeconds % 60;
+    timerLabel.setText(String.format("%d:%02d", minutes, seconds));
+  }
+
+  private void handleTimerExpired() {
+    Scene scene = door.getScene();
   }
 
   /**
@@ -68,7 +100,8 @@ public class RoomController {
 
     if (!GameState.isRiddleResolved) {
       showDialog("Info", "Riddle", "You need to resolve the riddle!");
-      App.setRoot("chat");
+      Scene scene = door.getScene();
+      scene.setRoot(SceneManager.getUiRoot(AppUi.CHAT));
       return;
     }
 

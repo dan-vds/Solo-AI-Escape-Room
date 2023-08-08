@@ -23,8 +23,7 @@ public class RoomController {
   @FXML private Rectangle vase;
   @FXML private Label timerLabel;
 
-  private int totalSeconds = 120;
-  private int remainingSeconds = totalSeconds;
+  private int remainingSeconds = GameState.secondsRemaining;
   private Timeline timeline;
 
   /** Initializes the room view, it is called when the room loads. */
@@ -35,6 +34,7 @@ public class RoomController {
                 Duration.seconds(1),
                 event -> {
                   remainingSeconds--;
+                  GameState.secondsRemaining--;
                   updateTimerLabel();
                 }));
     timeline.setCycleCount(120);
@@ -51,6 +51,7 @@ public class RoomController {
 
   private void handleTimerExpired() {
     Scene scene = door.getScene();
+    scene.setRoot(SceneManager.getUiRoot(AppUi.START_SCREEN));
   }
 
   /**

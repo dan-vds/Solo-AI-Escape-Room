@@ -2,15 +2,21 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import nz.ac.auckland.se206.App;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.GameState;
+import nz.ac.auckland.se206.SceneManager;
+import nz.ac.auckland.se206.SceneManager.AppUi;
 import nz.ac.auckland.se206.gpt.ChatMessage;
 import nz.ac.auckland.se206.gpt.GptPromptEngineering;
 import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
@@ -23,6 +29,10 @@ public class ChatController {
   @FXML private TextArea chatTextArea;
   @FXML private TextField inputText;
   @FXML private Button sendButton;
+  @FXML private Label timerLabelChat;
+  private int remainingSeconds = GameState.secondsRemaining;
+  private Timeline timeline;
+  private ChatMessage message;
 
   private ChatCompletionRequest chatCompletionRequest;
 
@@ -35,9 +45,33 @@ public class ChatController {
    */
   @FXML
   public void initialize() throws ApiProxyException, InterruptedException, ExecutionException {
+    timeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.seconds(1),
+                event -> {
+                  GameState.secondsRemaining--;
+                  remainingSeconds--;
+                  updateTimerLabel();
+                }));
+    timeline.setCycleCount(120);
+    timeline.setOnFinished(event -> handleTimerExpired());
+    updateTimerLabel();
+    timeline.play();
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
     runGpt(new ChatMessage("user", GptPromptEngineering.getRiddleWithGivenWord("vase")));
+  }
+
+  private void updateTimerLabel() {
+    int minutes = remainingSeconds / 60;
+    int seconds = remainingSeconds % 60;
+    timerLabelChat.setText(String.format("%d:%02d", minutes, seconds));
+  }
+
+  private void handleTimerExpired() {
+    Scene scene = sendButton.getScene();
+    scene.setRoot(SceneManager.getUiRoot(AppUi.START_SCREEN));
   }
 
   /**
@@ -55,41 +89,35 @@ public class ChatController {
    * @param msg the chat message to process
    * @return the response chat message
    * @throws ApiProxyException if there is an error communicating with the API proxy
-   * @throws ExecutionException
-   * @throws InterruptedException
    */
-  private ChatMessage runGpt(ChatMessage msg)
-      throws ApiProxyException, InterruptedException, ExecutionException {
+  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     chatCompletionRequest.addMessage(msg);
+    Choice result = null;
 
-    Task<ChatMessage> gptTask =
-        new Task<ChatMessage>() {
+    Task<Void> callGpt =
+        new Task<Void>() {
           @Override
-          protected ChatMessage call() throws Exception {
+          protected Void call() throws Exception {
             try {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
-              return result.getChatMessage();
+              message = result.getChatMessage();
+              Platform.runLater(
+                  () -> {
+                    appendChatMessage(result.getChatMessage());
+                  });
             } catch (ApiProxyException e) {
               // TODO handle exception appropriately
               e.printStackTrace();
               return null;
             }
+            return null;
           }
         };
-
-    new Thread(gptTask).start();
-
-    gptTask.setOnSucceeded(
-        event -> {
-          ChatMessage resultMessage = gptTask.getValue();
-          if (resultMessage != null) {
-            Platform.runLater(() -> appendChatMessage(resultMessage));
-          }
-        });
-
-    return gptTask.get();
+    Thread thread = new Thread(callGpt);
+    thread.start();
+    return message;
   }
 
   /**
@@ -126,6 +154,7 @@ public class ChatController {
    */
   @FXML
   private void onGoBack(ActionEvent event) throws ApiProxyException, IOException {
-    App.setRoot("room");
+    Scene scene = sendButton.getScene();
+    scene.setRoot(SceneManager.getUiRoot(AppUi.ROOM));
   }
 }

@@ -235,6 +235,13 @@ public class RoomController {
     }
   }
 
+  @FXML
+  public void clickPosters(MouseEvent event) {
+    Scene scene = door.getScene();
+    scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+    return;
+  }
+
   /**
    * Handles the click event on the vase.
    *

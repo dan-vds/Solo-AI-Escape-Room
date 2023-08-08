@@ -47,6 +47,7 @@ public class App extends Application {
     Parent root = loadFxml("startScreen");
 
     SceneManager.addUi(AppUi.START_SCREEN, loadFxml("startScreen"));
+    SceneManager.addUi(AppUi.CONVERTER, loadFxml("letterConverter"));
 
     scene = new Scene(SceneManager.getUiRoot(AppUi.START_SCREEN), 756, 468);
     stage.setScene(scene);

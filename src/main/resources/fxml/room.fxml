@@ -29,18 +29,67 @@
             </Label>
          </children>
       </HBox>
-      <Rectangle fx:id="ventilationGrill" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="58.0" layoutX="67.0" layoutY="115.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="60.0" />
-      <Rectangle fx:id="toiletPaper" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="46.0" layoutX="116.0" layoutY="247.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
-      <Rectangle fx:id="toilet" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="58.0" layoutX="70.0" layoutY="309.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="51.0" />
-      <Rectangle fx:id="door" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="292.0" layoutX="184.0" layoutY="93.0" onMouseClicked="#clickDoor" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="142.0" />
-      <Rectangle fx:id="posters" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="116.0" layoutX="336.0" layoutY="188.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="57.0" />
       <Rectangle fx:id="topBed" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="26.0" layoutX="418.0" layoutY="226.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="145.0" />
       <Rectangle fx:id="bottomBed" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="28.0" layoutX="419.0" layoutY="332.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="139.0" />
-      <Rectangle fx:id="bedsideTable" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="88.0" layoutX="555.0" layoutY="299.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="42.0" />
-      <Rectangle fx:id="sink" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="33.0" layoutX="615.0" layoutY="281.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="60.0" />
-      <Rectangle fx:id="tap" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="36.0" layoutX="635.0" layoutY="252.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="28.0" />
-      <Rectangle fx:id="mirror" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="69.0" layoutX="619.0" layoutY="176.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="50.0" />
-      <Rectangle fx:id="towel" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="69.0" layoutX="675.0" layoutY="266.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
-      <Rectangle fx:id="picture" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="54.0" layoutX="675.0" layoutY="184.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="30.0" />
+      <Rectangle fx:id="picture" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="54.0" layoutX="702.0" layoutY="178.0" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="30.0" />
+      <ImageView fx:id="toiletBig" fitHeight="80.0" fitWidth="72.0" layoutX="6.0" layoutY="303.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Basin.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="toilet" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="58.0" layoutX="6.0" layoutY="312.0" onMouseEntered="#toiletMouseEntered" onMouseExited="#toiletMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="51.0" />
+      <ImageView fx:id="toiletPaperBig" fitHeight="58.0" fitWidth="32.0" layoutX="60.0" layoutY="245.0" opacity="0.0">
+         <image>
+            <Image url="@../images/TP.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="toiletPaper" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="46.0" layoutX="63.0" layoutY="245.0" onMouseEntered="#toiletPaperMouseEntered" onMouseExited="#toiletPaperMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
+      <ImageView fx:id="doorBig" fitHeight="311.0" fitWidth="179.0" layoutX="128.0" layoutY="79.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Door.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="door" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="292.0" layoutX="150.0" layoutY="95.0" onMouseClicked="#clickDoor" onMouseEntered="#doorMouseEntered" onMouseExited="#doorMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="142.0" />
+      <ImageView fx:id="ventBig" fitHeight="66.0" fitWidth="74.0" layoutX="5.0" layoutY="109.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Vent.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="vent" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="58.0" layoutX="16.0" layoutY="118.0" onMouseEntered="#ventMouseEntered" onMouseExited="#ventMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="60.0" />
+      <ImageView fx:id="postersBig" fitHeight="135.0" fitWidth="97.0" layoutX="299.0" layoutY="180.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Posters.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="posters" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="116.0" layoutX="326.0" layoutY="189.0" onMouseEntered="#postersMouseEntered" onMouseExited="#postersMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="57.0" />
+      <ImageView fx:id="bedsideTableBig" fitHeight="94.0" fitWidth="68.0" layoutX="563.0" layoutY="295.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Bedside_table.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="bedsideTable" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="79.0" layoutX="574.0" layoutY="305.0" onMouseEntered="#bedsideTableMouseEntered" onMouseExited="#bedsideTableMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="48.0" />
+      <ImageView fx:id="sinkBig" fitHeight="74.0" fitWidth="82.0" layoutX="629.0" layoutY="277.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Sink.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="sink" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="33.0" layoutX="639.0" layoutY="281.0" onMouseEntered="#sinkMouseEntered" onMouseExited="#sinkMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="67.0" />
+      <ImageView fx:id="mirrorBig" fitHeight="87.0" fitWidth="57.0" layoutX="644.0" layoutY="175.0" opacity="0.0">
+         <image>
+            <Image url="@../images/mirror.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="36.0" fitWidth="34.0" layoutX="655.0" layoutY="246.0">
+         <image>
+            <Image url="@../images/Tap.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="mirror" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="89.0" layoutX="643.0" layoutY="177.0" onMouseEntered="#mirrorMouseEntered" onMouseExited="#mirrorMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="61.0" />
+      <ImageView fx:id="towelBig" fitHeight="72.0" fitWidth="38.0" layoutX="704.0" layoutY="265.0" opacity="0.0">
+         <image>
+            <Image url="@../images/Towel.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="towel" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="69.0" layoutX="708.0" layoutY="266.0" onMouseEntered="#towelMouseEntered" onMouseExited="#towelMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="31.0" />
    </children>
 </Pane>

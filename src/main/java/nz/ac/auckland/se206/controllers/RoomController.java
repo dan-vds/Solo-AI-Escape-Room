@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
@@ -20,7 +21,7 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class RoomController {
 
   @FXML private Rectangle door;
-  @FXML private Rectangle ventilationShaft;
+  @FXML private Rectangle vent;
   @FXML private Rectangle toiletPaper;
   @FXML private Rectangle toilet;
   @FXML private Rectangle posters;
@@ -31,6 +32,16 @@ public class RoomController {
   @FXML private Rectangle mirror;
   @FXML private Rectangle picture;
   @FXML private Rectangle towel;
+  @FXML private ImageView toiletBig;
+  @FXML private ImageView toiletPaperBig;
+  @FXML private ImageView doorBig;
+  @FXML private ImageView ventBig;
+  @FXML private ImageView postersBig;
+  @FXML private ImageView bedsideTableBig;
+  @FXML private ImageView sinkBig;
+  @FXML private ImageView mirrorBig;
+  @FXML private ImageView towelBig;
+
   @FXML private Label timerLabel;
 
   private Timeline timeline;
@@ -53,7 +64,7 @@ public class RoomController {
     // Getting random item to be used in the riddle
 
     Rectangle[] items =
-        new Rectangle[] {ventilationShaft, toiletPaper, toilet, bedsideTable, tap, mirror, towel};
+        new Rectangle[] {vent, toiletPaper, toilet, bedsideTable, tap, mirror, towel};
 
     Random random = new Random();
     int randomIndex = random.nextInt(items.length);
@@ -106,6 +117,96 @@ public class RoomController {
     alert.showAndWait();
   }
 
+  @FXML
+  public void toiletMouseEntered() {
+    toiletBig.setOpacity(1);
+  }
+
+  @FXML
+  public void toiletMouseExit() {
+    toiletBig.setOpacity(0);
+  }
+
+  @FXML
+  public void toiletPaperMouseEntered() {
+    toiletPaperBig.setOpacity(1);
+  }
+
+  @FXML
+  public void toiletPaperMouseExit() {
+    toiletPaperBig.setOpacity(0);
+  }
+
+  @FXML
+  public void doorMouseEntered() {
+    doorBig.setOpacity(1);
+  }
+
+  @FXML
+  public void doorMouseExit() {
+    doorBig.setOpacity(0);
+  }
+
+  @FXML
+  public void ventMouseEntered() {
+    ventBig.setOpacity(1);
+  }
+
+  @FXML
+  public void ventMouseExit() {
+    ventBig.setOpacity(0);
+  }
+
+  @FXML
+  public void postersMouseEntered() {
+    postersBig.setOpacity(1);
+  }
+
+  @FXML
+  public void postersMouseExit() {
+    postersBig.setOpacity(0);
+  }
+
+  @FXML
+  public void bedsideTableMouseEntered() {
+    bedsideTableBig.setOpacity(1);
+  }
+
+  @FXML
+  public void bedsideTableMouseExit() {
+    bedsideTableBig.setOpacity(0);
+  }
+
+  @FXML
+  public void sinkMouseEntered() {
+    sinkBig.setOpacity(1);
+  }
+
+  @FXML
+  public void sinkMouseExit() {
+    sinkBig.setOpacity(0);
+  }
+
+  @FXML
+  public void mirrorMouseEntered() {
+    mirrorBig.setOpacity(1);
+  }
+
+  @FXML
+  public void mirrorMouseExit() {
+    mirrorBig.setOpacity(0);
+  }
+
+  @FXML
+  public void towelMouseEntered() {
+    towelBig.setOpacity(1);
+  }
+
+  @FXML
+  public void towelMouseExit() {
+    towelBig.setOpacity(0);
+  }
+
   /**
    * Handles the click event on the door.
    *
@@ -117,7 +218,10 @@ public class RoomController {
     System.out.println("door clicked");
 
     if (!GameState.isRiddleResolved) {
-      showDialog("Info", "Riddle", "You need to resolve the riddle!");
+      showDialog(
+          "Info",
+          "A guard approaches...",
+          "\"Are you ready to break out of here? Then listen to this riddle:\" he says");
       Scene scene = door.getScene();
       scene.setRoot(SceneManager.getUiRoot(AppUi.CHAT));
       return;

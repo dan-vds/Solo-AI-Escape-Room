@@ -19,11 +19,19 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 public class RoomController {
 
   @FXML private Rectangle door;
-  @FXML private Rectangle window;
-  @FXML private Rectangle vase;
+  @FXML private Rectangle ventilationShaft;
+  @FXML private Rectangle toiletPaper;
+  @FXML private Rectangle toilet;
+  @FXML private Rectangle posters;
+  @FXML private Rectangle topBed;
+  @FXML private Rectangle bottomBed;
+  @FXML private Rectangle bedsideTable;
+  @FXML private Rectangle tap;
+  @FXML private Rectangle mirror;
+  @FXML private Rectangle picture;
+  @FXML private Rectangle towel;
   @FXML private Label timerLabel;
 
-  private int remainingSeconds = GameState.secondsRemaining;
   private Timeline timeline;
 
   /** Initializes the room view, it is called when the room loads. */

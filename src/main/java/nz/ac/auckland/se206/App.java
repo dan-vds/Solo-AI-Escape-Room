@@ -49,7 +49,7 @@ public class App extends Application {
     SceneManager.addUi(AppUi.START_SCREEN, loadFxml("startScreen"));
     SceneManager.addUi(AppUi.CHAT, loadFxml("chat"));
 
-    scene = new Scene(SceneManager.getUiRoot(AppUi.START_SCREEN), 600, 470);
+    scene = new Scene(SceneManager.getUiRoot(AppUi.START_SCREEN), 756, 468);
     stage.setScene(scene);
     stage.show();
     root.requestFocus();

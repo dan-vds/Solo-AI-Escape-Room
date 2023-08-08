@@ -30,7 +30,6 @@ public class ChatController {
   @FXML private TextField inputText;
   @FXML private Button sendButton;
   @FXML private Label timerLabelChat;
-  private int remainingSeconds = GameState.secondsRemaining;
   private Timeline timeline;
   private ChatMessage message;
 
@@ -44,14 +43,12 @@ public class ChatController {
    * @throws InterruptedException
    */
   @FXML
-  public void initialize() throws ApiProxyException, InterruptedException, ExecutionException {
+  public void initialize() throws ApiProxyException {
     timeline =
         new Timeline(
             new KeyFrame(
                 Duration.seconds(1),
                 event -> {
-                  GameState.secondsRemaining--;
-                  remainingSeconds--;
                   updateTimerLabel();
                 }));
     timeline.setCycleCount(120);
@@ -64,8 +61,8 @@ public class ChatController {
   }
 
   private void updateTimerLabel() {
-    int minutes = remainingSeconds / 60;
-    int seconds = remainingSeconds % 60;
+    int minutes = GameState.secondsRemaining / 60;
+    int seconds = GameState.secondsRemaining % 60;
     timerLabelChat.setText(String.format("%d:%02d", minutes, seconds));
   }
 
@@ -92,7 +89,6 @@ public class ChatController {
    */
   private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
     chatCompletionRequest.addMessage(msg);
-    Choice result = null;
 
     Task<Void> callGpt =
         new Task<Void>() {

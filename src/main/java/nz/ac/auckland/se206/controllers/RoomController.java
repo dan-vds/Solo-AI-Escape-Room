@@ -33,7 +33,6 @@ public class RoomController {
             new KeyFrame(
                 Duration.seconds(1),
                 event -> {
-                  remainingSeconds--;
                   GameState.secondsRemaining--;
                   updateTimerLabel();
                 }));
@@ -44,8 +43,8 @@ public class RoomController {
   }
 
   private void updateTimerLabel() {
-    int minutes = remainingSeconds / 60;
-    int seconds = remainingSeconds % 60;
+    int minutes = GameState.secondsRemaining / 60;
+    int seconds = GameState.secondsRemaining % 60;
     timerLabel.setText(String.format("%d:%02d", minutes, seconds));
   }
 

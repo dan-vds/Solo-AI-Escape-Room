@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -48,6 +49,15 @@ public class RoomController {
     timeline.setOnFinished(event -> handleTimerExpired());
     updateTimerLabel();
     timeline.play();
+
+    // Getting random item to be used in the riddle
+
+    Rectangle[] items =
+        new Rectangle[] {ventilationShaft, toiletPaper, toilet, bedsideTable, tap, mirror, towel};
+
+    Random random = new Random();
+    int randomIndex = random.nextInt(items.length);
+    GameState.itemToChoose = items[randomIndex];
   }
 
   private void updateTimerLabel() {

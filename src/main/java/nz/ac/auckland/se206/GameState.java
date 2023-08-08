@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206;
 
+import javafx.scene.shape.Rectangle;
+
 /** Represents the state of the game. */
 public class GameState {
 
@@ -10,4 +12,6 @@ public class GameState {
   public static boolean isKeyFound = false;
 
   public static int secondsRemaining = 120;
+
+  public static Rectangle itemToChoose;
 }

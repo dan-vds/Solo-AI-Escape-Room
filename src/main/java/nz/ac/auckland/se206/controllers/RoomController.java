@@ -152,6 +152,7 @@ public class RoomController {
   @FXML
   public void toiletMouseEntered() {
     toiletBig.setOpacity(1);
+    toiletArrow.setOpacity(0);
   }
 
   @FXML
@@ -162,6 +163,7 @@ public class RoomController {
   @FXML
   public void toiletPaperMouseEntered() {
     toiletPaperBig.setOpacity(1);
+    toiletPaperArrow.setOpacity(0);
   }
 
   @FXML
@@ -182,6 +184,7 @@ public class RoomController {
   @FXML
   public void ventMouseEntered() {
     ventBig.setOpacity(1);
+    ventArrow.setOpacity(0);
   }
 
   @FXML
@@ -192,6 +195,7 @@ public class RoomController {
   @FXML
   public void postersMouseEntered() {
     postersBig.setOpacity(1);
+    postersArrow.setOpacity(0);
   }
 
   @FXML
@@ -202,6 +206,7 @@ public class RoomController {
   @FXML
   public void bedsideTableMouseEntered() {
     bedsideTableBig.setOpacity(1);
+    bedsideTableArrow.setOpacity(0);
   }
 
   @FXML
@@ -212,6 +217,7 @@ public class RoomController {
   @FXML
   public void sinkMouseEntered() {
     sinkBig.setOpacity(1);
+    sinkArrow.setOpacity(0);
   }
 
   @FXML
@@ -222,6 +228,7 @@ public class RoomController {
   @FXML
   public void mirrorMouseEntered() {
     mirrorBig.setOpacity(1);
+    mirrorArrow.setOpacity(0);
   }
 
   @FXML
@@ -232,6 +239,7 @@ public class RoomController {
   @FXML
   public void towelMouseEntered() {
     towelBig.setOpacity(1);
+    towelArrow.setOpacity(0);
   }
 
   @FXML
@@ -261,7 +269,7 @@ public class RoomController {
 
     if (!GameState.isKeyFound) {
       showDialog(
-          "Info", "Find the key!", "You resolved the riddle, now you know where the key is.");
+          "Info", "The door is padlocked shut!", "You must find the passcode to escape!");
     } else {
       showDialog("Info", "You Won!", "Good Job!");
     }

@@ -292,12 +292,10 @@ public class RoomController {
       Scene scene = door.getScene();
       scene.setRoot(SceneManager.getUiRoot(AppUi.CHAT));
       return;
-    }
-
-    if (!GameState.isKeyFound) {
-      showDialog("Info", "The door is padlocked shut!", "You must find the passcode to escape!");
     } else {
-      showDialog("Info", "You Won!", "Good Job!");
+      showDialog("Info", "The door is padlocked shut!", "You must find the passcode to escape!");
+      Scene scene = door.getScene();
+      scene.setRoot(SceneManager.getUiRoot(AppUi.PADLOCK));
     }
   }
 

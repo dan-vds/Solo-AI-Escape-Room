@@ -2,8 +2,10 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.util.Random;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -11,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.GameState;
@@ -19,7 +22,7 @@ import nz.ac.auckland.se206.SceneManager.AppUi;
 
 /** Controller class for the room view. */
 public class RoomController {
-
+  @FXML private Pane room;
   @FXML private Rectangle door;
   @FXML private Rectangle vent;
   @FXML private Rectangle toiletPaper;
@@ -41,6 +44,15 @@ public class RoomController {
   @FXML private ImageView sinkBig;
   @FXML private ImageView mirrorBig;
   @FXML private ImageView towelBig;
+  @FXML private ImageView toiletArrow;
+  @FXML private ImageView postersArrow;
+  @FXML private ImageView toiletPaperArrow;
+  @FXML private ImageView ventArrow;
+  @FXML private ImageView bedsideTableArrow;
+  @FXML private ImageView sinkArrow;
+  @FXML private ImageView mirrorArrow;
+  @FXML private ImageView towelArrow;
+  @FXML private ImageView windowArrow;
 
   @FXML private Label timerLabel;
 
@@ -48,6 +60,15 @@ public class RoomController {
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
+    AnimateArrows(toiletArrow);
+    AnimateArrows(postersArrow);
+    AnimateArrows(toiletPaperArrow);
+    AnimateArrows(ventArrow);
+    AnimateArrows(bedsideTableArrow);
+    AnimateArrows(sinkArrow);
+    AnimateArrows(mirrorArrow);
+    AnimateArrows(towelArrow);
+    AnimateArrows(windowArrow);
     timeline =
         new Timeline(
             new KeyFrame(
@@ -69,6 +90,17 @@ public class RoomController {
     Random random = new Random();
     int randomIndex = random.nextInt(items.length);
     GameState.itemToChoose = items[randomIndex];
+  }
+
+  private void AnimateArrows(ImageView arrow) {
+    double startY = 0;
+
+    TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), arrow);
+    translateTransition.setFromY(startY);
+    translateTransition.setToY(startY + 5);
+    translateTransition.setAutoReverse(true);
+    translateTransition.setCycleCount(Animation.INDEFINITE);
+    translateTransition.play();
   }
 
   private void updateTimerLabel() {
@@ -240,20 +272,6 @@ public class RoomController {
     Scene scene = door.getScene();
     scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
     return;
-  }
-
-  /**
-   * Handles the click event on the vase.
-   *
-   * @param event the mouse event
-   */
-  @FXML
-  public void clickVase(MouseEvent event) {
-    System.out.println("vase clicked");
-    if (GameState.isRiddleResolved && !GameState.isKeyFound) {
-      showDialog("Info", "Key Found", "You found a key under the vase!");
-      GameState.isKeyFound = true;
-    }
   }
 
   /**

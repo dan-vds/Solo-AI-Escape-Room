@@ -28,8 +28,7 @@ public class RoomController {
   @FXML private Rectangle toiletPaper;
   @FXML private Rectangle toilet;
   @FXML private Rectangle posters;
-  @FXML private Rectangle topBed;
-  @FXML private Rectangle bottomBed;
+  @FXML private Rectangle sink;
   @FXML private Rectangle bedsideTable;
   @FXML private Rectangle tap;
   @FXML private Rectangle mirror;
@@ -53,22 +52,21 @@ public class RoomController {
   @FXML private ImageView mirrorArrow;
   @FXML private ImageView towelArrow;
   @FXML private ImageView windowArrow;
-
+  @FXML private ImageView doorArrow;
   @FXML private Label timerLabel;
 
   private Timeline timeline;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
-    AnimateArrows(toiletArrow);
-    AnimateArrows(postersArrow);
-    AnimateArrows(toiletPaperArrow);
-    AnimateArrows(ventArrow);
-    AnimateArrows(bedsideTableArrow);
-    AnimateArrows(sinkArrow);
-    AnimateArrows(mirrorArrow);
-    AnimateArrows(towelArrow);
-    AnimateArrows(windowArrow);
+    animateArrows(doorArrow);
+    GameState.isRiddleResolvedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue) {
+                animateAllArrows();
+              }
+            });
     timeline =
         new Timeline(
             new KeyFrame(
@@ -84,15 +82,28 @@ public class RoomController {
 
     // Getting random item to be used in the riddle
 
-    Rectangle[] items =
-        new Rectangle[] {vent, toiletPaper, toilet, bedsideTable, tap, mirror, towel};
+    Rectangle[] items = new Rectangle[] {vent, toiletPaper, toilet, bedsideTable, mirror, towel};
 
     Random random = new Random();
     int randomIndex = random.nextInt(items.length);
     GameState.itemToChoose = items[randomIndex];
   }
 
-  private void AnimateArrows(ImageView arrow) {
+  public void animateAllArrows() {
+    animateArrows(toiletArrow);
+    animateArrows(postersArrow);
+    animateArrows(toiletPaperArrow);
+    animateArrows(ventArrow);
+    animateArrows(bedsideTableArrow);
+    animateArrows(sinkArrow);
+    animateArrows(mirrorArrow);
+    animateArrows(towelArrow);
+    animateArrows(windowArrow);
+  }
+
+  public void animateArrows(ImageView arrow) {
+    arrow.setOpacity(1);
+
     double startY = 0;
 
     TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), arrow);
@@ -151,8 +162,10 @@ public class RoomController {
 
   @FXML
   public void toiletMouseEntered() {
-    toiletBig.setOpacity(1);
-    toiletArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      toiletBig.setOpacity(1);
+      toiletArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -162,8 +175,10 @@ public class RoomController {
 
   @FXML
   public void toiletPaperMouseEntered() {
-    toiletPaperBig.setOpacity(1);
-    toiletPaperArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      toiletPaperBig.setOpacity(1);
+      toiletPaperArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -183,8 +198,10 @@ public class RoomController {
 
   @FXML
   public void ventMouseEntered() {
-    ventBig.setOpacity(1);
-    ventArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      ventBig.setOpacity(1);
+      ventArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -194,8 +211,10 @@ public class RoomController {
 
   @FXML
   public void postersMouseEntered() {
-    postersBig.setOpacity(1);
-    postersArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      postersBig.setOpacity(1);
+      postersArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -205,8 +224,10 @@ public class RoomController {
 
   @FXML
   public void bedsideTableMouseEntered() {
-    bedsideTableBig.setOpacity(1);
-    bedsideTableArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      bedsideTableBig.setOpacity(1);
+      bedsideTableArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -216,8 +237,10 @@ public class RoomController {
 
   @FXML
   public void sinkMouseEntered() {
-    sinkBig.setOpacity(1);
-    sinkArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      sinkBig.setOpacity(1);
+      sinkArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -227,8 +250,10 @@ public class RoomController {
 
   @FXML
   public void mirrorMouseEntered() {
-    mirrorBig.setOpacity(1);
-    mirrorArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      mirrorBig.setOpacity(1);
+      mirrorArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -238,8 +263,10 @@ public class RoomController {
 
   @FXML
   public void towelMouseEntered() {
-    towelBig.setOpacity(1);
-    towelArrow.setOpacity(0);
+    if (GameState.isRiddleResolved()) {
+      towelBig.setOpacity(1);
+      towelArrow.setOpacity(0);
+    }
   }
 
   @FXML
@@ -255,9 +282,9 @@ public class RoomController {
    */
   @FXML
   public void clickDoor(MouseEvent event) throws IOException {
-    System.out.println("door clicked");
+    doorArrow.setOpacity(0);
 
-    if (!GameState.isRiddleResolved) {
+    if (!GameState.isRiddleResolved()) {
       showDialog(
           "Info",
           "A guard approaches...",
@@ -268,8 +295,7 @@ public class RoomController {
     }
 
     if (!GameState.isKeyFound) {
-      showDialog(
-          "Info", "The door is padlocked shut!", "You must find the passcode to escape!");
+      showDialog("Info", "The door is padlocked shut!", "You must find the passcode to escape!");
     } else {
       showDialog("Info", "You Won!", "Good Job!");
     }
@@ -277,9 +303,110 @@ public class RoomController {
 
   @FXML
   public void clickPosters(MouseEvent event) {
-    Scene scene = door.getScene();
-    scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+    if (GameState.isRiddleResolved()) {
+      Scene scene = door.getScene();
+      scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+    }
     return;
+  }
+
+  @FXML
+  public void clickToilet(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == toilet) {
+        showDialog(
+            "Nice Job",
+            "You found the item!",
+            "On the inside of the toilet is written the word " + "JAIL");
+      } else {
+        showDialog("Nothing!", "Toilet", "Just a normal toilet.");
+      }
+    }
+    return;
+  }
+
+  @FXML
+  public void clickToiletPaper(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == toiletPaper) {
+        showDialog(
+            "Nice Job", "You found the item!", "On the toilet paper is written the word " + "JAIL");
+      } else {
+        showDialog("Nothing!", "Toilet Paper", "Just a normal roll of toilet paper.");
+      }
+    }
+    return;
+  }
+
+  @FXML
+  public void clickVent(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == vent) {
+        showDialog(
+            "Nice Job",
+            "You found the item!",
+            "In the vent you notice a piece of paper, scribbled on one side is the word " + "JAIL");
+      } else {
+        showDialog("Nothing!", "Vent", "Just an empty vent");
+      }
+    }
+  }
+
+  @FXML
+  public void clickBedsideTable(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == bedsideTable) {
+        showDialog(
+            "Nice Job",
+            "You found the item!",
+            "In the drawer you notice a piece of paper, scribbled on one side is the word "
+                + "JAIL");
+      } else {
+        showDialog("Nothing!", "Bedside Table", "Nothing inside...");
+      }
+    }
+  }
+
+  @FXML
+  public void clickSink(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == sink) {
+        showDialog(
+            "Nice Job",
+            "You found the item!",
+            "In the sink you notice scribbled on the side is the word " + "JAIL");
+      } else {
+        showDialog("Nothing!", "Sink", "Just an empty sink");
+      }
+    }
+  }
+
+  @FXML
+  public void clickMirror(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == mirror) {
+        showDialog(
+            "Nice Job",
+            "You found the item!",
+            "On the mirror you notice a word written in ink: " + "JAIL");
+      } else {
+        showDialog("Nothing!", "Mirror", "Just a normal mirror");
+      }
+    }
+  }
+
+  @FXML
+  public void clickTowel(MouseEvent event) {
+    if (GameState.isRiddleResolved()) {
+      if (GameState.itemToChoose == towel) {
+        showDialog(
+            "Nice Job",
+            "You found the item!",
+            "You notice that scribbled on one side of the towel is the word " + "JAIL");
+      } else {
+        showDialog("Nothing!", "Towel", "Just a normal towel");
+      }
+    }
   }
 
   /**

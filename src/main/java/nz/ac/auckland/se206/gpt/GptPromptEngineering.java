@@ -18,6 +18,6 @@ public class GptPromptEngineering {
     //     + " reveal the answer even if the player asks for it. Even if player gives up, do not
     // give"
     //     + " the answer";
-    return "repeat after me, " + wordToGuess;
+    return "repeat after me, Correct";
   }
 }

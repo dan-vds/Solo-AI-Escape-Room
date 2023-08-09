@@ -2,6 +2,7 @@ package nz.ac.auckland.se206.controllers;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -31,7 +32,6 @@ public class ChatController {
   @FXML private Button sendButton;
   @FXML private Label timerLabelChat;
   private Timeline timeline;
-  private ChatMessage message;
 
   private ChatCompletionRequest chatCompletionRequest;
 
@@ -57,9 +57,10 @@ public class ChatController {
     timeline.play();
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-    runGpt(
+    ChatMessage userChatMessage =
         new ChatMessage(
-            "user", GptPromptEngineering.getRiddleWithGivenWord(GameState.itemToChoose.getId())));
+            "user", GptPromptEngineering.getRiddleWithGivenWord(GameState.itemToChoose.getId()));
+    runGpt(userChatMessage, lastMsg -> {});
   }
 
   private void updateTimerLabel() {
@@ -89,33 +90,31 @@ public class ChatController {
    * @return the response chat message
    * @throws ApiProxyException if there is an error communicating with the API proxy
    */
-  private ChatMessage runGpt(ChatMessage msg) throws ApiProxyException {
-    chatCompletionRequest.addMessage(msg);
-
+  private void runGpt(ChatMessage msg, Consumer<ChatMessage> completionCallback)
+      throws ApiProxyException {
     Task<Void> callGpt =
         new Task<Void>() {
           @Override
           protected Void call() throws Exception {
+            chatCompletionRequest.addMessage(msg);
             try {
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
-              message = result.getChatMessage();
               Platform.runLater(
                   () -> {
                     appendChatMessage(result.getChatMessage());
+                    completionCallback.accept(result.getChatMessage());
                   });
             } catch (ApiProxyException e) {
               // TODO handle exception appropriately
               e.printStackTrace();
-              return null;
             }
             return null;
           }
         };
     Thread thread = new Thread(callGpt);
     thread.start();
-    return message;
   }
 
   /**
@@ -124,12 +123,9 @@ public class ChatController {
    * @param event the action event triggered by the send button
    * @throws ApiProxyException if there is an error communicating with the API proxy
    * @throws IOException if there is an I/O error
-   * @throws ExecutionException
-   * @throws InterruptedException
    */
   @FXML
-  private void onSendMessage(ActionEvent event)
-      throws ApiProxyException, IOException, InterruptedException, ExecutionException {
+  private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
     String message = inputText.getText();
     if (message.trim().isEmpty()) {
       return;
@@ -137,10 +133,14 @@ public class ChatController {
     inputText.clear();
     ChatMessage msg = new ChatMessage("user", message);
     appendChatMessage(msg);
-    ChatMessage lastMsg = runGpt(msg);
-    if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
-      GameState.setRiddleResolved(true);
-    }
+
+    runGpt(
+        msg,
+        lastMsg -> {
+          if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
+            GameState.setRiddleResolved(true);
+          }
+        });
   }
 
   /**

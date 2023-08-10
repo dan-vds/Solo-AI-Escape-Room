@@ -178,7 +178,7 @@ public class RoomController {
   }
 
   @FXML
-  private void startGame() {
+  private void clickStartGame() {
     textToSpeech = new TextToSpeech();
     textToSpeech.speak("Welcome to the room");
     animateArrows(doorArrow);
@@ -257,7 +257,7 @@ public class RoomController {
   }
 
   @FXML
-  private void openPadlock() {
+  private void clickOpenPadlock() {
     int digitOneInt = Integer.parseInt(digitOne.getText());
     int digitTwoInt = Integer.parseInt(digitTwo.getText());
     int digitThreeInt = Integer.parseInt(digitThree.getText());
@@ -272,7 +272,7 @@ public class RoomController {
   }
 
   @FXML
-  private void exitPadlock() {
+  private void clickExitPadlock() {
     padlockPane.setVisible(false);
   }
 
@@ -325,7 +325,7 @@ public class RoomController {
   }
 
   @FXML
-  private void exitConverterView() {
+  private void clickExitConverterView() {
     converterPane.setVisible(false);
   }
 

@@ -177,7 +177,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Button fx:id="exitViewButton" layoutX="205.0" layoutY="266.0" mnemonicParsing="false" onAction="#clickExitConverterView" prefHeight="40.0" prefWidth="103.0" text="Exit view">
+            <Button fx:id="exitViewButton" layoutX="205.0" layoutY="266.0" mnemonicParsing="false" onAction="#onClickExitConverterView" prefHeight="40.0" prefWidth="103.0" text="Exit view">
                <font>
                   <Font size="19.0" />
                </font>
@@ -210,7 +210,7 @@
                <font>
                   <Font size="29.0" />
                </font></Label>
-      <Button fx:id="openButton" layoutX="487.0" layoutY="188.0" mnemonicParsing="false" onAction="#clickOpenPadlock" text="OPEN" />
+      <Button fx:id="openButton" layoutX="487.0" layoutY="188.0" mnemonicParsing="false" onAction="#onClickOpenPadlock" text="OPEN" />
       <ImageView fx:id="digitOnePlus" fitHeight="37.0" fitWidth="40.0" layoutX="168.0" layoutY="138.0" onMouseClicked="#digitOneIncrement">
          <image>
             <Image url="@../images/incrementer.png" />
@@ -251,7 +251,7 @@
             <Image url="@../images/incrementer.png" />
          </image>
       </ImageView>
-            <Button fx:id="exitPadlockButton" layoutX="275.0" layoutY="300.0" mnemonicParsing="false" onAction="#clickExitPadlock" prefHeight="37.0" prefWidth="103.0" text="Go Back">
+            <Button fx:id="exitPadlockButton" layoutX="275.0" layoutY="300.0" mnemonicParsing="false" onAction="#onClickExitPadlock" prefHeight="37.0" prefWidth="103.0" text="Go Back">
                <font>
                   <Font size="19.0" />
                </font>
@@ -263,13 +263,13 @@
     <TextField fx:id="inputText" layoutX="31.0" layoutY="314.0" prefHeight="26.0" prefWidth="435.0" />
     <Button fx:id="sendButton" layoutX="496.0" layoutY="312.0" mnemonicParsing="false" onAction="#onSendMessage" text="Send" />
     <Button layoutX="568.0" layoutY="312.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
-            <ProgressIndicator fx:id="chatProgress" layoutX="541.0" layoutY="219.0" prefHeight="63.0" prefWidth="47.0" progress="0.0" />
-            <Label fx:id="chatProgressLabel" layoutX="507.0" layoutY="172.0" text="The guard is thinking..." />
+            <ProgressIndicator fx:id="chatProgress" layoutX="541.0" layoutY="219.0" prefHeight="63.0" prefWidth="47.0" progress="0.0" visible="false" />
+            <Label fx:id="chatProgressLabel" layoutX="507.0" layoutY="172.0" text="The guard is thinking..." visible="false" />
          </children>
       </Pane>
       <Pane fx:id="startPane" layoutX="78.0" layoutY="81.0" prefHeight="351.0" prefWidth="600.0" style="-fx-background-color: white;">
          <children>
-            <Button fx:id="startButton" layoutX="229.0" layoutY="255.0" mnemonicParsing="false" onAction="#clickStartGame" prefHeight="53.0" prefWidth="142.0" text="Start Game" />
+            <Button fx:id="startButton" layoutX="229.0" layoutY="255.0" mnemonicParsing="false" onAction="#onClickStartGame" prefHeight="53.0" prefWidth="142.0" text="Start Game" />
             <Text layoutX="58.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the escAIpe room. You have been locked in a jail cell by an evil sheriff! You have 2 minutes to escape!" wrappingWidth="499.8835896435521">
                <font>
                   <Font size="18.0" />

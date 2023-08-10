@@ -110,26 +110,28 @@ public class RoomController {
    * @throws ApiProxyException
    */
   public void initialize() throws ApiProxyException {
-    // Getting random item to be used in the riddle
 
+    // Getting random item to be used in the riddle
     Rectangle[] itemsForWord = new Rectangle[] {bedsideTable, window, picture};
     Random random = new Random();
     int randomIndex = random.nextInt(itemsForWord.length);
     this.itemCode = itemsForWord[randomIndex];
 
+    // Getting a random item to hide the chart behind
     Rectangle[] items = new Rectangle[] {vent, toiletPaper, toilet, mirror, towel, sink};
-
     Random randomChoose = new Random();
     int randomIndexChoose = randomChoose.nextInt(items.length);
     GameState.itemToChoose = items[randomIndexChoose];
 
+    // Sending the initial request so the riddle is ready when the player enters the chat
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-
     ChatMessage userChatMessage =
         new ChatMessage(
             "user", GptPromptEngineering.getRiddleWithGivenWord(GameState.itemToChoose.getId()));
     runGpt(userChatMessage, lastMsg -> {});
+
+    // Setting up the timer timeline
     timeline =
         new Timeline(
             new KeyFrame(
@@ -178,7 +180,7 @@ public class RoomController {
   }
 
   @FXML
-  private void clickStartGame() {
+  private void onClickStartGame() {
     textToSpeech = new TextToSpeech();
     textToSpeech.speak("Welcome to the room");
     animateArrows(doorArrow);
@@ -257,7 +259,7 @@ public class RoomController {
   }
 
   @FXML
-  private void clickOpenPadlock() {
+  private void onClickOpenPadlock() {
     int digitOneInt = Integer.parseInt(digitOne.getText());
     int digitTwoInt = Integer.parseInt(digitTwo.getText());
     int digitThreeInt = Integer.parseInt(digitThree.getText());
@@ -272,7 +274,7 @@ public class RoomController {
   }
 
   @FXML
-  private void clickExitPadlock() {
+  private void onClickExitPadlock() {
     padlockPane.setVisible(false);
   }
 
@@ -325,7 +327,7 @@ public class RoomController {
   }
 
   @FXML
-  private void clickExitConverterView() {
+  private void onClickExitConverterView() {
     converterPane.setVisible(false);
   }
 
@@ -618,7 +620,6 @@ public class RoomController {
         showDialog("Nothing!", "Posters", "Just some posters");
       }
     }
-    return;
   }
 
   /**
@@ -643,17 +644,20 @@ public class RoomController {
    */
   private void runGpt(ChatMessage msg, Consumer<ChatMessage> completionCallback)
       throws ApiProxyException {
+    // define a new task to create threading
     Task<Void> callGpt =
         new Task<Void>() {
           @Override
           protected Void call() throws Exception {
             try {
+              // add the message to the request
               chatCompletionRequest.addMessage(msg);
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
               chatCompletionRequest.addMessage(result.getChatMessage());
               Platform.runLater(
                   () -> {
+                    // update gui components later
                     appendChatMessage(result.getChatMessage());
                     completionCallback.accept(result.getChatMessage());
                     chatProgress.setVisible(false);
@@ -666,8 +670,10 @@ public class RoomController {
             return null;
           }
         };
+    // start thread
     Thread thread = new Thread(callGpt);
     thread.start();
+    // set progress circle to loading
     chatProgress.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
     chatProgress.setVisible(true);
     chatProgressLabel.setVisible(true);

@@ -61,6 +61,20 @@ public class RoomController {
   @FXML private Label timerLabel;
   @FXML private Pane converterPane;
   @FXML private Button exitViewButton;
+  @FXML private Button openButton;
+  @FXML private ImageView digitOnePlus;
+  @FXML private ImageView digitOneMinus;
+  @FXML private ImageView digitTwoPlus;
+  @FXML private ImageView digitTwoMinus;
+  @FXML private ImageView digitThreePlus;
+  @FXML private ImageView digitThreeMinus;
+  @FXML private ImageView digitFourPlus;
+  @FXML private ImageView digitFourMinus;
+  @FXML private Label digitOne;
+  @FXML private Label digitTwo;
+  @FXML private Label digitThree;
+  @FXML private Label digitFour;
+  @FXML private Pane padlockPane;
 
   private Timeline timeline;
   private Rectangle itemCode;
@@ -126,6 +140,82 @@ public class RoomController {
     translateTransition.setAutoReverse(true);
     translateTransition.setCycleCount(Animation.INDEFINITE);
     translateTransition.play();
+  }
+
+  @FXML
+  private void digitOneIncrement() {
+    int digit = Integer.parseInt(digitOne.getText());
+    digit = (digit + 1) % 10;
+    digitOne.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitOneDecrement() {
+    int digit = Integer.parseInt(digitOne.getText());
+    digit = (digit - 1 + 10) % 10;
+    digitOne.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitTwoIncrement() {
+    int digit = Integer.parseInt(digitTwo.getText());
+    digit = (digit + 1) % 10;
+    digitTwo.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitTwoDecrement() {
+    int digit = Integer.parseInt(digitTwo.getText());
+    digit = (digit - 1 + 10) % 10;
+    digitTwo.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitThreeIncrement() {
+    int digit = Integer.parseInt(digitThree.getText());
+    digit = (digit + 1) % 10;
+    digitThree.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitThreeDecrement() {
+    int digit = Integer.parseInt(digitThree.getText());
+    digit = (digit - 1 + 10) % 10;
+    digitThree.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitFourIncrement() {
+    int digit = Integer.parseInt(digitFour.getText());
+    digit = (digit + 1) % 10;
+    digitFour.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void digitFourDecrement() {
+    int digit = Integer.parseInt(digitFour.getText());
+    digit = (digit - 1 + 10) % 10;
+    digitFour.setText(Integer.toString(digit));
+  }
+
+  @FXML
+  private void openPadlock() {
+    int digitOneInt = Integer.parseInt(digitOne.getText());
+    int digitTwoInt = Integer.parseInt(digitTwo.getText());
+    int digitThreeInt = Integer.parseInt(digitThree.getText());
+    int digitFourInt = Integer.parseInt(digitFour.getText());
+    if (digitOneInt == 0 && digitTwoInt == 1 && digitThreeInt == 9 && digitFourInt == 2) {
+      Scene scene = openButton.getScene();
+      GameState.isWon = true;
+      scene.setRoot(SceneManager.getUiRoot(SceneManager.AppUi.ENDWON));
+    } else {
+      showDialog("Wrong combination", "Try again", "The padlock did not open.");
+    }
+  }
+
+  @FXML
+  private void exitPadlock() {
+    padlockPane.setVisible(false);
   }
 
   private void updateTimerLabel() {
@@ -342,8 +432,7 @@ public class RoomController {
       return;
     } else {
       showDialog("Info", "The door is padlocked shut!", "You must find the passcode to escape!");
-      Scene scene = door.getScene();
-      scene.setRoot(SceneManager.getUiRoot(AppUi.PADLOCK));
+      padlockPane.setVisible(true);
     }
   }
 

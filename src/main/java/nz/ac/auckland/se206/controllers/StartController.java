@@ -15,7 +15,7 @@ public class StartController {
   public void startGame() throws IOException {
     Scene scene = startButton.getScene();
     SceneManager.addUi(AppUi.ROOM, App.loadFxml("room"));
-    SceneManager.addUi(AppUi.CHAT, App.loadFxml("chat"));
+    // SceneManager.addUi(AppUi.CHAT, App.loadFxml("chat"));
     scene.setRoot(SceneManager.getUiRoot(AppUi.ROOM));
     return;
   }

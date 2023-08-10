@@ -32,6 +32,7 @@ import nz.ac.auckland.se206.gpt.openai.ApiProxyException;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionRequest;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult;
 import nz.ac.auckland.se206.gpt.openai.ChatCompletionResult.Choice;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /** Controller class for the room view. */
 public class RoomController {
@@ -95,9 +96,12 @@ public class RoomController {
   private Timeline timeline;
   private Rectangle itemCode;
   private ChatCompletionRequest chatCompletionRequest;
+  private TextToSpeech textToSpeech;
 
   /** Initializes the room view, it is called when the room loads. */
   public void initialize() {
+    textToSpeech = new TextToSpeech();
+    textToSpeech.speak("Welcome to the room");
     animateArrows(doorArrow);
     GameState.isRiddleResolvedProperty()
         .addListener(
@@ -113,6 +117,13 @@ public class RoomController {
                 event -> {
                   GameState.secondsRemaining--;
                   updateTimerLabel();
+                  if (GameState.secondsRemaining == 90) {
+                    textToSpeech.speak("a minute and a half remaining");
+                  } else if (GameState.secondsRemaining == 60) {
+                    textToSpeech.speak("one minute remaining");
+                  } else if (GameState.secondsRemaining == 30) {
+                    textToSpeech.speak("thirty seconds remaining");
+                  }
                 }));
     timeline.setCycleCount(120);
     timeline.setOnFinished(event -> handleTimerExpired());
@@ -619,10 +630,11 @@ public class RoomController {
         new Task<Void>() {
           @Override
           protected Void call() throws Exception {
-            chatCompletionRequest.addMessage(msg);
             try {
+              chatCompletionRequest.addMessage(msg);
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
+              chatCompletionRequest = null;
               chatCompletionRequest.addMessage(result.getChatMessage());
               Platform.runLater(
                   () -> {
@@ -663,6 +675,7 @@ public class RoomController {
           if (lastMsg.getRole().equals("assistant") && lastMsg.getContent().startsWith("Correct")) {
             GameState.setRiddleResolved(true);
           }
+          System.out.println(chatCompletionRequest.toString());
         });
   }
 

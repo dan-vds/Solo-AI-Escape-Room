@@ -22,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager;
@@ -92,44 +93,19 @@ public class RoomController {
   @FXML private Label digitFour;
   @FXML private Pane padlockPane;
   @FXML private Pane chatPane;
+  @FXML private Pane startPane;
 
   private Timeline timeline;
   private Rectangle itemCode;
   private ChatCompletionRequest chatCompletionRequest;
   private TextToSpeech textToSpeech;
 
-  /** Initializes the room view, it is called when the room loads. */
-  public void initialize() {
-    textToSpeech = new TextToSpeech();
-    textToSpeech.speak("Welcome to the room");
-    animateArrows(doorArrow);
-    GameState.isRiddleResolvedProperty()
-        .addListener(
-            (observable, oldValue, newValue) -> {
-              if (newValue) {
-                animateAllArrows();
-              }
-            });
-    timeline =
-        new Timeline(
-            new KeyFrame(
-                Duration.seconds(1),
-                event -> {
-                  GameState.secondsRemaining--;
-                  updateTimerLabel();
-                  if (GameState.secondsRemaining == 90) {
-                    textToSpeech.speak("a minute and a half remaining");
-                  } else if (GameState.secondsRemaining == 60) {
-                    textToSpeech.speak("one minute remaining");
-                  } else if (GameState.secondsRemaining == 30) {
-                    textToSpeech.speak("thirty seconds remaining");
-                  }
-                }));
-    timeline.setCycleCount(120);
-    timeline.setOnFinished(event -> handleTimerExpired());
-    updateTimerLabel();
-    timeline.play();
-
+  /**
+   * Initializes the room view, it is called when the room loads.
+   *
+   * @throws ApiProxyException
+   */
+  public void initialize() throws ApiProxyException {
     // Getting random item to be used in the riddle
 
     Rectangle[] itemsForWord = new Rectangle[] {bedsideTable, window, picture};
@@ -142,6 +118,32 @@ public class RoomController {
     Random randomChoose = new Random();
     int randomIndexChoose = randomChoose.nextInt(items.length);
     GameState.itemToChoose = items[randomIndexChoose];
+
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
+
+    ChatMessage userChatMessage =
+        new ChatMessage(
+            "user", GptPromptEngineering.getRiddleWithGivenWord(GameState.itemToChoose.getId()));
+    runGpt(userChatMessage, lastMsg -> {});
+    timeline =
+        new Timeline(
+            new KeyFrame(
+                Duration.seconds(1),
+                event -> {
+                  GameState.secondsRemaining--;
+                  updateTimerLabel();
+                  if (GameState.secondsRemaining == 90 && GameState.isWon == false) {
+                    textToSpeech.speak("a minute and a half remaining");
+                  } else if (GameState.secondsRemaining == 60 && GameState.isWon == false) {
+                    textToSpeech.speak("one minute remaining");
+                  } else if (GameState.secondsRemaining == 30 && GameState.isWon == false) {
+                    textToSpeech.speak("thirty seconds remaining");
+                  }
+                }));
+    timeline.setCycleCount(120);
+    timeline.setOnFinished(event -> handleTimerExpired());
+    updateTimerLabel();
   }
 
   public void animateAllArrows() {
@@ -168,6 +170,29 @@ public class RoomController {
     translateTransition.setAutoReverse(true);
     translateTransition.setCycleCount(Animation.INDEFINITE);
     translateTransition.play();
+  }
+
+  @FXML
+  private void startGame() {
+    textToSpeech = new TextToSpeech();
+    textToSpeech.speak("Welcome to the room");
+    animateArrows(doorArrow);
+    GameState.isRiddleResolvedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue) {
+                animateAllArrows();
+              }
+            });
+    timeline.play();
+    startPane.setVisible(false);
+    Stage stage = (Stage) startPane.getScene().getWindow();
+    stage.setOnCloseRequest(
+        event -> {
+          timeline.stop();
+          textToSpeech.terminate();
+          Platform.exit();
+        });
   }
 
   @FXML
@@ -457,12 +482,6 @@ public class RoomController {
           "A guard approaches...",
           "\"Are you ready to break out of here? Then listen to this riddle:\" he says");
       chatPane.setVisible(true);
-      chatCompletionRequest =
-          new ChatCompletionRequest().setN(1).setTemperature(0.2).setTopP(0.5).setMaxTokens(100);
-      ChatMessage userChatMessage =
-          new ChatMessage(
-              "user", GptPromptEngineering.getRiddleWithGivenWord(GameState.itemToChoose.getId()));
-      runGpt(userChatMessage, lastMsg -> {});
       return;
     } else {
       showDialog("Info", "The door is padlocked shut!", "You must find the passcode to escape!");
@@ -634,7 +653,7 @@ public class RoomController {
               chatCompletionRequest.addMessage(msg);
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
-              chatCompletionRequest = null;
+              // chatCompletionRequest = null;
               chatCompletionRequest.addMessage(result.getChatMessage());
               Platform.runLater(
                   () -> {

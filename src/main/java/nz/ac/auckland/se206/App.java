@@ -46,13 +46,15 @@ public class App extends Application {
   public void start(final Stage stage) throws IOException {
     Parent root = loadFxml("startScreen");
 
-    SceneManager.addUi(AppUi.START_SCREEN, loadFxml("startScreen"));
-    SceneManager.addUi(AppUi.CONVERTER, loadFxml("letterConverter"));
+    // SceneManager.addUi(AppUi.START_SCREEN, loadFxml("startScreen"));
+    // SceneManager.addUi(AppUi.CONVERTER, loadFxml("letterConverter"));
     SceneManager.addUi(AppUi.ENDWON, loadFxml("endScreenWon"));
-    SceneManager.addUi(AppUi.PADLOCK, App.loadFxml("padlock"));
+    // SceneManager.addUi(AppUi.PADLOCK, App.loadFxml("padlock"));
     SceneManager.addUi(AppUi.END_LOST, App.loadFxml("endScreenLost"));
+    SceneManager.addUi(AppUi.ROOM, App.loadFxml("room"));
+    // SceneManager.addUi(AppUi.CHAT, App.loadFxml("chat"));
 
-    scene = new Scene(SceneManager.getUiRoot(AppUi.START_SCREEN), 756, 468);
+    scene = new Scene(SceneManager.getUiRoot(AppUi.ROOM), 756, 468);
     stage.setScene(scene);
     stage.show();
     root.requestFocus();

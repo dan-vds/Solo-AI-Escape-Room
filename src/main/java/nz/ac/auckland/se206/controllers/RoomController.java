@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -94,6 +95,9 @@ public class RoomController {
   @FXML private Pane padlockPane;
   @FXML private Pane chatPane;
   @FXML private Pane startPane;
+  @FXML private ImageView doorArrowSmall;
+  @FXML private ProgressIndicator chatProgress;
+  @FXML private Label chatProgressLabel;
 
   private Timeline timeline;
   private Rectangle itemCode;
@@ -157,6 +161,7 @@ public class RoomController {
     animateArrows(towelArrow);
     animateArrows(windowArrow);
     animateArrows(pictureArrow);
+    animateArrows(doorArrowSmall);
   }
 
   public void animateArrows(ImageView arrow) {
@@ -203,7 +208,7 @@ public class RoomController {
   }
 
   @FXML
-  private void digitOneDecrement() {
+  private void digitOneDecrease() {
     int digit = Integer.parseInt(digitOne.getText());
     digit = (digit - 1 + 10) % 10;
     digitOne.setText(Integer.toString(digit));
@@ -217,7 +222,7 @@ public class RoomController {
   }
 
   @FXML
-  private void digitTwoDecrement() {
+  private void digitTwoDecrease() {
     int digit = Integer.parseInt(digitTwo.getText());
     digit = (digit - 1 + 10) % 10;
     digitTwo.setText(Integer.toString(digit));
@@ -231,7 +236,7 @@ public class RoomController {
   }
 
   @FXML
-  private void digitThreeDecrement() {
+  private void digitThreeDecrease() {
     int digit = Integer.parseInt(digitThree.getText());
     digit = (digit - 1 + 10) % 10;
     digitThree.setText(Integer.toString(digit));
@@ -245,7 +250,7 @@ public class RoomController {
   }
 
   @FXML
-  private void digitFourDecrement() {
+  private void digitFourDecrease() {
     int digit = Integer.parseInt(digitFour.getText());
     digit = (digit - 1 + 10) % 10;
     digitFour.setText(Integer.toString(digit));
@@ -320,7 +325,7 @@ public class RoomController {
   }
 
   @FXML
-  public void exitConverterView() {
+  private void exitConverterView() {
     converterPane.setVisible(false);
   }
 
@@ -328,7 +333,6 @@ public class RoomController {
   public void toiletMouseEntered() {
     if (GameState.isRiddleResolved()) {
       toiletBig.setOpacity(1);
-      toiletArrow.setOpacity(0);
     }
   }
 
@@ -341,7 +345,6 @@ public class RoomController {
   public void toiletPaperMouseEntered() {
     if (GameState.isRiddleResolved()) {
       toiletPaperBig.setOpacity(1);
-      toiletPaperArrow.setOpacity(0);
     }
   }
 
@@ -364,7 +367,6 @@ public class RoomController {
   public void ventMouseEntered() {
     if (GameState.isRiddleResolved()) {
       ventBig.setOpacity(1);
-      ventArrow.setOpacity(0);
     }
   }
 
@@ -377,7 +379,6 @@ public class RoomController {
   public void postersMouseEntered() {
     if (GameState.isRiddleResolved()) {
       postersBig.setOpacity(1);
-      postersArrow.setOpacity(0);
     }
   }
 
@@ -390,7 +391,6 @@ public class RoomController {
   public void bedsideTableMouseEntered() {
     if (GameState.isRiddleResolved()) {
       bedsideTableBig.setOpacity(1);
-      bedsideTableArrow.setOpacity(0);
     }
   }
 
@@ -403,7 +403,6 @@ public class RoomController {
   public void sinkMouseEntered() {
     if (GameState.isRiddleResolved()) {
       sinkBig.setOpacity(1);
-      sinkArrow.setOpacity(0);
     }
   }
 
@@ -416,7 +415,6 @@ public class RoomController {
   public void mirrorMouseEntered() {
     if (GameState.isRiddleResolved()) {
       mirrorBig.setOpacity(1);
-      mirrorArrow.setOpacity(0);
     }
   }
 
@@ -429,7 +427,6 @@ public class RoomController {
   public void towelMouseEntered() {
     if (GameState.isRiddleResolved()) {
       towelBig.setOpacity(1);
-      towelArrow.setOpacity(0);
     }
   }
 
@@ -442,7 +439,6 @@ public class RoomController {
   public void windowMouseEntered() {
     if (GameState.isRiddleResolved()) {
       windowBig.setOpacity(1);
-      windowArrow.setOpacity(0);
     }
   }
 
@@ -455,13 +451,11 @@ public class RoomController {
   public void pictureMouseEntered() {
     if (GameState.isRiddleResolved()) {
       pictureBig.setOpacity(1);
-      pictureArrow.setOpacity(0);
     }
   }
 
   @FXML
   public void pictureMouseExit() {
-    pictureArrow.setOpacity(0);
     pictureBig.setOpacity(0);
   }
 
@@ -491,6 +485,7 @@ public class RoomController {
 
   @FXML
   public void clickToilet(MouseEvent event) {
+    toiletArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (GameState.itemToChoose == toilet) {
         showDialog(
@@ -501,11 +496,11 @@ public class RoomController {
         showDialog("Nothing!", "Toilet", "Just a normal toilet.");
       }
     }
-    return;
   }
 
   @FXML
   public void clickToiletPaper(MouseEvent event) {
+    toiletPaperArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (GameState.itemToChoose == toiletPaper) {
         showDialog(
@@ -514,11 +509,11 @@ public class RoomController {
         showDialog("Nothing!", "Toilet Paper", "Just a normal roll of toilet paper.");
       }
     }
-    return;
   }
 
   @FXML
   public void clickVent(MouseEvent event) {
+    ventArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (GameState.itemToChoose == vent) {
         showDialog(
@@ -533,6 +528,7 @@ public class RoomController {
 
   @FXML
   public void clickSink(MouseEvent event) {
+    sinkArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (GameState.itemToChoose == sink) {
         showDialog(
@@ -547,6 +543,7 @@ public class RoomController {
 
   @FXML
   public void clickMirror(MouseEvent event) {
+    mirrorArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (GameState.itemToChoose == mirror) {
         showDialog(
@@ -561,6 +558,7 @@ public class RoomController {
 
   @FXML
   public void clickTowel(MouseEvent event) {
+    towelArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (GameState.itemToChoose == towel) {
         showDialog(
@@ -575,10 +573,9 @@ public class RoomController {
 
   @FXML
   public void clickBedsideTable(MouseEvent event) {
+    bedsideTableArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (itemCode == bedsideTable) {
-        // Scene scene = door.getScene();
-        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
         converterPane.setVisible(true);
 
       } else {
@@ -589,10 +586,9 @@ public class RoomController {
 
   @FXML
   public void clickWindow(MouseEvent event) {
+    windowArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (itemCode == window) {
-        // Scene scene = door.getScene();
-        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
         converterPane.setVisible(true);
       } else {
         showDialog("Nothing!", "Window", "Just a normal window");
@@ -602,10 +598,9 @@ public class RoomController {
 
   @FXML
   public void clickPicture(MouseEvent event) {
+    pictureArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
       if (itemCode == picture) {
-        // Scene scene = door.getScene();
-        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
         converterPane.setVisible(true);
       } else {
         showDialog("Nothing!", "Picture", "Just a normal picture");
@@ -615,10 +610,9 @@ public class RoomController {
 
   @FXML
   public void clickPosters(MouseEvent event) {
+    postersArrow.setOpacity(0);
     if (GameState.isRiddleResolved()) {
-      if (itemCode == picture) {
-        // Scene scene = door.getScene();
-        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+      if (itemCode == posters) {
         converterPane.setVisible(true);
       } else {
         showDialog("Nothing!", "Posters", "Just some posters");
@@ -633,7 +627,11 @@ public class RoomController {
    * @param msg the chat message to append
    */
   private void appendChatMessage(ChatMessage msg) {
-    chatTextArea.appendText(msg.getRole() + ": " + msg.getContent() + "\n\n");
+    if (msg.getRole().equals("assistant")) {
+      chatTextArea.appendText("Guard: " + msg.getContent() + "\n\n");
+    } else if (msg.getRole().equals("user")) {
+      chatTextArea.appendText("You: " + msg.getContent() + "\n\n");
+    }
   }
 
   /**
@@ -653,12 +651,13 @@ public class RoomController {
               chatCompletionRequest.addMessage(msg);
               ChatCompletionResult chatCompletionResult = chatCompletionRequest.execute();
               Choice result = chatCompletionResult.getChoices().iterator().next();
-              // chatCompletionRequest = null;
               chatCompletionRequest.addMessage(result.getChatMessage());
               Platform.runLater(
                   () -> {
                     appendChatMessage(result.getChatMessage());
                     completionCallback.accept(result.getChatMessage());
+                    chatProgress.setVisible(false);
+                    chatProgressLabel.setVisible(false);
                   });
             } catch (ApiProxyException e) {
               // TODO handle exception appropriately
@@ -669,6 +668,9 @@ public class RoomController {
         };
     Thread thread = new Thread(callGpt);
     thread.start();
+    chatProgress.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+    chatProgress.setVisible(true);
+    chatProgressLabel.setVisible(true);
   }
 
   /**

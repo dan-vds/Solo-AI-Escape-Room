@@ -6,12 +6,8 @@ import javafx.scene.Parent;
 public class SceneManager {
 
   public enum AppUi {
-    START_SCREEN,
     ROOM,
-    CHAT,
     ENDWON,
-    CONVERTER,
-    PADLOCK,
     END_LOST
   }
 

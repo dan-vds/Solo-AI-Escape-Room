@@ -50,6 +50,9 @@ public class ChatController {
                 Duration.seconds(1),
                 event -> {
                   updateTimerLabel();
+                  if (GameState.secondsRemaining == 0) {
+                    handleTimerExpired();
+                  }
                 }));
     timeline.setCycleCount(120);
     timeline.setOnFinished(event -> handleTimerExpired());
@@ -70,8 +73,10 @@ public class ChatController {
   }
 
   private void handleTimerExpired() {
-    Scene scene = sendButton.getScene();
-    scene.setRoot(SceneManager.getUiRoot(AppUi.START_SCREEN));
+    if (!GameState.isWon) {
+      Scene scene = sendButton.getScene();
+      scene.setRoot(SceneManager.getUiRoot(AppUi.END_LOST));
+    }
   }
 
   /**

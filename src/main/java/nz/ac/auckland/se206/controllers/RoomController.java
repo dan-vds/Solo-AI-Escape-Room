@@ -9,6 +9,7 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -58,6 +59,8 @@ public class RoomController {
   @FXML private ImageView windowBig;
   @FXML private ImageView pictureBig;
   @FXML private Label timerLabel;
+  @FXML private Pane converterPane;
+  @FXML private Button exitViewButton;
 
   private Timeline timeline;
   private Rectangle itemCode;
@@ -132,8 +135,10 @@ public class RoomController {
   }
 
   private void handleTimerExpired() {
-    Scene scene = door.getScene();
-    scene.setRoot(SceneManager.getUiRoot(AppUi.START_SCREEN));
+    if (!GameState.isWon) {
+      Scene scene = door.getScene();
+      scene.setRoot(SceneManager.getUiRoot(AppUi.END_LOST));
+    }
   }
 
   /**
@@ -169,6 +174,11 @@ public class RoomController {
     alert.setHeaderText(headerText);
     alert.setContentText(message);
     alert.showAndWait();
+  }
+
+  @FXML
+  public void exitConverterView() {
+    converterPane.setVisible(false);
   }
 
   @FXML
@@ -425,8 +435,10 @@ public class RoomController {
   public void clickBedsideTable(MouseEvent event) {
     if (GameState.isRiddleResolved()) {
       if (itemCode == bedsideTable) {
-        Scene scene = door.getScene();
-        scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        // Scene scene = door.getScene();
+        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        converterPane.setVisible(true);
+
       } else {
         showDialog("Nothing!", "Bedside Table", "Nothing inside...");
       }
@@ -437,8 +449,9 @@ public class RoomController {
   public void clickWindow(MouseEvent event) {
     if (GameState.isRiddleResolved()) {
       if (itemCode == window) {
-        Scene scene = door.getScene();
-        scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        // Scene scene = door.getScene();
+        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        converterPane.setVisible(true);
       } else {
         showDialog("Nothing!", "Window", "Just a normal window");
       }
@@ -449,8 +462,9 @@ public class RoomController {
   public void clickPicture(MouseEvent event) {
     if (GameState.isRiddleResolved()) {
       if (itemCode == picture) {
-        Scene scene = door.getScene();
-        scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        // Scene scene = door.getScene();
+        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        converterPane.setVisible(true);
       } else {
         showDialog("Nothing!", "Picture", "Just a normal picture");
       }
@@ -461,8 +475,9 @@ public class RoomController {
   public void clickPosters(MouseEvent event) {
     if (GameState.isRiddleResolved()) {
       if (itemCode == picture) {
-        Scene scene = door.getScene();
-        scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        // Scene scene = door.getScene();
+        // scene.setRoot(SceneManager.getUiRoot(AppUi.CONVERTER));
+        converterPane.setVisible(true);
       } else {
         showDialog("Nothing!", "Posters", "Just some posters");
       }

@@ -10,8 +10,7 @@ public class GameState {
   /** Indicates whether the riddle has been resolved. */
   private static final BooleanProperty isRiddleResolvedProperty = new SimpleBooleanProperty(false);
 
-  /** Indicates whether the key has been found. */
-  public static boolean isKeyFound = false;
+  public static boolean isWon = false;
 
   public static int secondsRemaining = 120;
 

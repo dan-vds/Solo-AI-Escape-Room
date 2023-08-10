@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import nz.ac.auckland.se206.GameState;
 import nz.ac.auckland.se206.SceneManager;
 
 public class PadlockController {
@@ -23,6 +24,9 @@ public class PadlockController {
   @FXML private Label digitTwo;
   @FXML private Label digitThree;
   @FXML private Label digitFour;
+
+  @FXML
+  public void initialise() {}
 
   @FXML
   private void digitOneIncrement() {
@@ -86,9 +90,10 @@ public class PadlockController {
     int digitTwoInt = Integer.parseInt(digitTwo.getText());
     int digitThreeInt = Integer.parseInt(digitThree.getText());
     int digitFourInt = Integer.parseInt(digitFour.getText());
-    if (digitOneInt == 1 && digitTwoInt == 2 && digitThreeInt == 3 && digitFourInt == 4) {
+    if (digitOneInt == 0 && digitTwoInt == 1 && digitThreeInt == 9 && digitFourInt == 2) {
       Scene scene = openButton.getScene();
-      scene.setRoot(SceneManager.getUiRoot(SceneManager.AppUi.START_SCREEN));
+      GameState.isWon = true;
+      scene.setRoot(SceneManager.getUiRoot(SceneManager.AppUi.ENDWON));
     } else {
       showDialog("Wrong combination", "Try again", "The padlock did not open.");
     }

@@ -48,7 +48,9 @@ public class App extends Application {
 
     SceneManager.addUi(AppUi.START_SCREEN, loadFxml("startScreen"));
     SceneManager.addUi(AppUi.CONVERTER, loadFxml("letterConverter"));
+    SceneManager.addUi(AppUi.ENDWON, loadFxml("endScreenWon"));
     SceneManager.addUi(AppUi.PADLOCK, App.loadFxml("padlock"));
+    SceneManager.addUi(AppUi.END_LOST, App.loadFxml("endScreenLost"));
 
     scene = new Scene(SceneManager.getUiRoot(AppUi.START_SCREEN), 756, 468);
     stage.setScene(scene);

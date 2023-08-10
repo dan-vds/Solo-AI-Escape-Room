@@ -9,9 +9,10 @@ public class SceneManager {
     START_SCREEN,
     ROOM,
     CHAT,
-    END,
+    ENDWON,
     CONVERTER,
-    PADLOCK
+    PADLOCK,
+    END_LOST
   }
 
   private static HashMap<AppUi, Parent> sceneMap = new HashMap<AppUi, Parent>();

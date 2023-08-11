@@ -177,12 +177,12 @@
                   <Image url="@../images/speechBubble.png" />
                </image>
             </ImageView>
-            <Text layoutX="36.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Psst, hey, talk to me" wrappingWidth="50.287109375">
+            <Text layoutX="40.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Stuck? Talk to me!" wrappingWidth="50.287109375">
                <font>
                   <Font size="11.0" />
                </font>
             </Text>
-            <Rectangle fx:id="textBubble" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="59.0" layoutX="25.0" layoutY="-15.0" onMouseClicked="#onTextBubbleClicked" onMouseEntered="#textBubbleMouseEntered" onMouseExited="#textBubbleMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
+            <Rectangle fx:id="textBubble" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="59.0" layoutX="24.0" layoutY="-6.0" onMouseClicked="#onTextBubbleClicked" onMouseEntered="#textBubbleMouseEntered" onMouseExited="#textBubbleMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
          </children>
       </Pane>
       <Pane fx:id="converterPane" layoutX="92.0" layoutY="89.0" prefHeight="324.0" prefWidth="559.0" style="-fx-background-color: white;" visible="false">

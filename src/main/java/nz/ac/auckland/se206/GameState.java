@@ -16,6 +16,8 @@ public class GameState {
 
   public static Rectangle itemToChoose;
 
+  public static int questionsAsked = 0;
+
   public static boolean isRiddleResolved() {
     return isRiddleResolvedProperty.get();
   }

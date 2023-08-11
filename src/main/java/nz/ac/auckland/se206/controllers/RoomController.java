@@ -98,6 +98,11 @@ public class RoomController {
   @FXML private ImageView doorArrowSmall;
   @FXML private ProgressIndicator chatProgress;
   @FXML private Label chatProgressLabel;
+  @FXML private Rectangle textBubble;
+  @FXML private ImageView bubbleBig;
+  @FXML private Pane guardSpeechPane;
+  @FXML private ImageView textBubbleArrow;
+  @FXML private Label overQuestionLimitLabel;
 
   private Timeline timeline;
   private Rectangle itemCode;
@@ -164,6 +169,7 @@ public class RoomController {
     animateArrows(windowArrow);
     animateArrows(pictureArrow);
     animateArrows(doorArrowSmall);
+    animateArrows(textBubbleArrow);
   }
 
   public void animateArrows(ImageView arrow) {
@@ -189,6 +195,7 @@ public class RoomController {
             (observable, oldValue, newValue) -> {
               if (newValue) {
                 animateAllArrows();
+                guardSpeechPane.setVisible(true);
               }
             });
     timeline.play();
@@ -461,6 +468,16 @@ public class RoomController {
     pictureBig.setOpacity(0);
   }
 
+  @FXML
+  public void textBubbleMouseEntered() {
+    bubbleBig.setOpacity(1);
+  }
+
+  @FXML
+  public void textBubbleMouseExit() {
+    bubbleBig.setOpacity(0);
+  }
+
   /**
    * Handles the click event on the door.
    *
@@ -471,7 +488,7 @@ public class RoomController {
   @FXML
   public void clickDoor(MouseEvent event) throws IOException, ApiProxyException {
     doorArrow.setOpacity(0);
-
+    doorArrowSmall.setOpacity(0);
     if (!GameState.isRiddleResolved()) {
       showDialog(
           "Info",
@@ -622,6 +639,16 @@ public class RoomController {
     }
   }
 
+  @FXML
+  private void onTextBubbleClicked() throws ApiProxyException {
+    textBubbleArrow.setOpacity(0);
+    chatPane.setVisible(true);
+    chatCompletionRequest =
+        new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(0.5).setMaxTokens(100);
+    ChatMessage userChatMessage = new ChatMessage("user", GptPromptEngineering.getGuardSetUp());
+    runGpt(userChatMessage, lastMsg -> {});
+  }
+
   /**
    * Appends a chat message to the chat text area.
    *
@@ -688,6 +715,14 @@ public class RoomController {
    */
   @FXML
   private void onSendMessage(ActionEvent event) throws ApiProxyException, IOException {
+    if (GameState.isRiddleResolved()) {
+      GameState.questionsAsked++;
+      if (GameState.questionsAsked >= 2) {
+        sendButton.disableProperty().set(true);
+        overQuestionLimitLabel.setVisible(true);
+        inputText.disableProperty().set(true);
+      }
+    }
     String message = inputText.getText();
     if (message.trim().isEmpty()) {
       return;

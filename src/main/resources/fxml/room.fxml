@@ -15,7 +15,7 @@
 
 <Pane fx:id="room" focusTraversable="true" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="468.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.RoomController">
    <children>
-      <ImageView fitHeight="403.0" fitWidth="742.0" layoutX="5.0" layoutY="58.0">
+      <ImageView fitHeight="403.0" fitWidth="742.0" layoutX="7.0" layoutY="57.0">
          <image>
             <Image url="@../images/prison_room.jpg" />
          </image>
@@ -165,6 +165,26 @@
          </image>
       </ImageView>
       <Rectangle fx:id="picture" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="53.0" layoutX="708.0" layoutY="179.0" onMouseClicked="#clickPicture" onMouseEntered="#pictureMouseEntered" onMouseExited="#pictureMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="24.0" />
+      <Pane fx:id="guardSpeechPane" layoutX="294.0" layoutY="94.0" prefHeight="79.0" prefWidth="89.0" visible="false">
+         <children>
+            <ImageView fitHeight="72.0" fitWidth="82.0" layoutX="15.0" layoutY="-12.0">
+               <image>
+                  <Image url="@../images/speechBubble.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="bubbleBig" fitHeight="94.0" fitWidth="91.0" layoutX="10.0" layoutY="-22.0" opacity="0.0">
+               <image>
+                  <Image url="@../images/speechBubble.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="36.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Psst, hey, talk to me" wrappingWidth="50.287109375">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Text>
+            <Rectangle fx:id="textBubble" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="59.0" layoutX="25.0" layoutY="-15.0" onMouseClicked="#onTextBubbleClicked" onMouseEntered="#textBubbleMouseEntered" onMouseExited="#textBubbleMouseExit" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="63.0" />
+         </children>
+      </Pane>
       <Pane fx:id="converterPane" layoutX="92.0" layoutY="89.0" prefHeight="324.0" prefWidth="559.0" style="-fx-background-color: white;" visible="false">
          <children>
             <ImageView fitHeight="186.0" fitWidth="459.0" layoutX="49.0" layoutY="71.0">
@@ -265,6 +285,7 @@
     <Button layoutX="568.0" layoutY="312.0" mnemonicParsing="false" onAction="#onGoBack" text="Go Back" />
             <ProgressIndicator fx:id="chatProgress" layoutX="541.0" layoutY="219.0" prefHeight="63.0" prefWidth="47.0" progress="0.0" visible="false" />
             <Label fx:id="chatProgressLabel" layoutX="507.0" layoutY="172.0" text="The guard is thinking..." visible="false" />
+            <Label fx:id="overQuestionLimitLabel" layoutX="457.0" layoutY="289.0" text="You have reached the question limit" visible="false" />
          </children>
       </Pane>
       <Pane fx:id="startPane" layoutX="78.0" layoutY="81.0" prefHeight="351.0" prefWidth="600.0" style="-fx-background-color: white;">
@@ -278,6 +299,11 @@
          </children>
       </Pane>
       <ImageView fx:id="toiletArrow" fitHeight="20.0" fitWidth="19.0" layoutX="32.0" layoutY="277.0" opacity="0.0">
+         <image>
+            <Image url="@../images/newArrow.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="textBubbleArrow" fitHeight="20.0" fitWidth="19.0" layoutX="338.0" layoutY="58.0" opacity="0.0">
          <image>
             <Image url="@../images/newArrow.png" />
          </image>

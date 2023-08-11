@@ -103,6 +103,7 @@ public class RoomController {
   @FXML private Pane guardSpeechPane;
   @FXML private ImageView textBubbleArrow;
   @FXML private Label overQuestionLimitLabel;
+  @FXML private Label questionInfoLabel;
 
   private Timeline timeline;
   private Rectangle itemCode;
@@ -643,6 +644,7 @@ public class RoomController {
   private void onTextBubbleClicked() throws ApiProxyException {
     textBubbleArrow.setOpacity(0);
     chatPane.setVisible(true);
+    questionInfoLabel.setVisible(true);
     chatCompletionRequest =
         new ChatCompletionRequest().setN(1).setTemperature(1).setTopP(0.5).setMaxTokens(100);
     ChatMessage userChatMessage = new ChatMessage("user", GptPromptEngineering.getGuardSetUp());
